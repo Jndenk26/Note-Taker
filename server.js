@@ -19,6 +19,15 @@ app.use(express.urlencoded({ extended: true }));
 // Sends entire public folder to browser
 app.use(express.static('public'));
 
+// API Route (always before app.listen and after the middleware)
+app.get('/api/notes', (req, res) => {
+    fs.readFile(`./db/db.json`, (err, data) => {
+        const results = JSON.parse(data)
+        res.json(results)
+    }
+  );
+});
+
 // Route
 app.get('/', (req, res) =>
   res.sendFile(path.join(__dirname, '/public/index.html'))
@@ -27,6 +36,10 @@ app.get('/', (req, res) =>
 app.get('/notes', (req, res) =>
   res.sendFile(path.join(__dirname, '/public/notes.html'))
 );
+
+
+
+
 
 // Listens to anything that happens on port 3001; and then can respond.  
 app.listen(PORT, () =>
